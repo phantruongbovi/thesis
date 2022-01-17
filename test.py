@@ -4,17 +4,9 @@ from PIL import Image
 import imagehash
 import os
 import time
+from datetime import datetime
 
 def checkImg(name):
-  # hash0 = imagehash.average_hash(Image.open('data/'+ str(name)+'.png'))
-  # hash1 = imagehash.average_hash(Image.open('data/'+ str(name+1)+'.png'))
-  # cutoff = 5
-  # if hash0 - hash1 < cutoff:
-  #   print(hash0 - hash1)
-  #   os.remove('data/' + str(name+1) + '.png')
-  #   return True
-  # else:
-  #   return False
   i1 = cv2.imread('data/' + str(name) + '.png')
   i2 = cv2.imread('data/' + str(name+1) + '.png')
   difference = cv2.subtract(i1, i2)
@@ -24,13 +16,16 @@ def checkImg(name):
     return False
   else:
     return True
-def captureI(count):
+def captureI():
   #if count == 0:
+  now = datetime.now()
+  current_time = now.strftime("%H:%M")
   img = autopy.bitmap.capture_screen()
-  img.save('data/' + str(count+1) + '.png')
-  img = cv2.imread('data/' + str(count+1) + '.png')
-  crop_img = img[75:1020, 1920:4000]
-  cv2.imwrite('data/' + str(count+1) + '.png', crop_img)
+  img.save('data/' + current_time + '.png')
+  img = cv2.imread('data/' + current_time + '.png')
+  crop_img = img[0:1080, 1920:4000]
+  cv2.imwrite('data/' + current_time + '.png', crop_img)
+  
   return True
   # else:
   #   img = autopy.bitmap.capture_screen()
@@ -40,8 +35,11 @@ def captureI(count):
   #   cv2.imwrite('data/'+ str(count+1) +'.png', crop_img)
   #   return checkImg(count)
 
-count = 21
+a = False
 while True:
-  captureI(count)
-  count+=1
-  time.sleep(150)
+  # if a == False:
+  #   time.sleep(5)
+  #   a = True
+  captureI()
+  #count+=1
+  time.sleep(60)
